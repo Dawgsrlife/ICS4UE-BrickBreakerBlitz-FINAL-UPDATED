@@ -8,10 +8,13 @@
  */
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -45,6 +48,7 @@ public class BrickBreaker extends Game {
 	// Paddle:
 	private Paddle player;
 	private final int PAD_START_WIDTH = 40, PAD_THICKNESS = 6, PAD_OFFSET = 50, PAD_STARTING_SPEED = 3;
+	private BufferedImage paddleImage = null;
 
 	// Bricks — Arrays of bricks for each level:
 	private Brick[] level1Bricks, level2Bricks, level3Bricks;
@@ -67,13 +71,24 @@ public class BrickBreaker extends Game {
 		// Setting the game delay, in milliseconds.
 		setDelay(10);
 
-		// Adding the ball.
+		// Creating the ball:
 		b = new Ball(getFieldWidth() / 2, getFieldHeight() - PAD_OFFSET - PAD_THICKNESS * 2, BALL_SIZE, Color.CYAN, BALL_STARTING_SPEED, (rand.nextDouble() > 0.5 ? rand.nextInt(20, 70) : rand.nextInt(110, 160)));
-		add(b);
 
-		// Adding the paddle.
+		// Creating the paddle:
 		player = new Paddle((getFieldWidth() - PAD_START_WIDTH) / 2,
 				getFieldHeight() - PAD_OFFSET, PAD_THICKNESS * 10, PAD_START_WIDTH, PAD_STARTING_SPEED);
+		try {
+			paddleImage = ImageIO.read(new File("src/PNG/49-Breakout-Tiles.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Creating the power-ups:
+		laserPowerup = new Powerup(0, 0, POWERUP_SIZE, POWERUP_STARTING_SPEED, getFieldHeight(), Color.MAGENTA, false);
+		doubleDamagePowerup = new Powerup(0, 0, POWERUP_SIZE, POWERUP_STARTING_SPEED, getFieldHeight(), Color.GREEN, false);
+
+		// Adding the game objects:
+		add(b);
 		add(player);
 
 		// Levels of bricks, which are all added to their respective arrays below.
