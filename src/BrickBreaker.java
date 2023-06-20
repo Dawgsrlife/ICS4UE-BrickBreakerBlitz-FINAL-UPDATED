@@ -16,12 +16,6 @@ import java.io.IOException;
 import java.io.FileWriter;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.UIManager;
-import javax.swing.SwingUtilities;
-
 
 /**
  * The BrickBreaker game.
@@ -60,14 +54,16 @@ public class BrickBreaker extends Game {
 
 	private Powerup laserPowerup, doubleDamagePowerup;
 
-	// Constructor with throws IOException clause
-	public BrickBreaker () throws IOException { }
+	// Constructor with throws IOException clause:
+	public BrickBreaker() throws IOException {
+		;
+	}
 
 	/**
 	 * Tells the game what to do before the actual play begins.
 	 */
 	public void setup() {
-		// Setting the game delay, in milliseconds.
+		// Setting the game delay, in milliseconds:
 		setDelay(10);
 
 		// Creating the ball:
@@ -211,7 +207,7 @@ public class BrickBreaker extends Game {
 		// X-collision with the lateral bounds:
 		// Left wall collision.
 		if (b.getX() <= 0) {
-			b.setX(1);
+			b.setX(1); // Technically the ball should be 1 pixel away from the wall for its next movement anyway.
 			b.bounceOnLeft();
 		}
 		// Right wall collision.
@@ -223,7 +219,7 @@ public class BrickBreaker extends Game {
 		// Y-collision with the ceiling and disappear at bottom:
 		// Collision with the roof.
 		if (b.getY() <= 0) {
-			b.setY(1);
+			b.setY(1); // Technically the ball should be 1 pixel away from the wall for its next movement anyway.
 			b.bounceOnTop();
 		}
 		// Hits the floor case.
@@ -382,6 +378,7 @@ public class BrickBreaker extends Game {
 		b.setAngle(rand.nextInt(0, 360));
 		repaint();
 		stopGame();
+		// TODO: prompt for the user to play again
 	}
 
 	/**

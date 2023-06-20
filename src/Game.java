@@ -12,8 +12,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -105,8 +108,9 @@ public abstract class Game extends JFrame {
 	 * method after the frame becomes visible.
 	 */
 	public void initComponents() {
-		getContentPane().setBackground(Color.black);
+		getContentPane().setBackground(Color.BLACK);
 		setup();
+		setResizable(false);
 		for (int i = 0; i < _ObjectList.size(); i++) {
 			GameObject o = (GameObject)_ObjectList.get(i);
 			o.repaint();
@@ -169,12 +173,11 @@ public abstract class Game extends JFrame {
 	 *
 	 * The default window size is 400x400
 	 */
-
-
 	public Game() {
 		setSize(400, 500);
-		getContentPane().setBackground(Color.BLACK);
+//		getContentPane().setBackground(new Color(0, 0, 0, 0));
 		getContentPane().setLayout(null);
+		setUndecorated(true);
 //		JMenuBar menuBar = new JMenuBar();
 //		JMenu menuFile = new JMenu("File");
 //		JMenuItem menuFileExit = new JMenuItem("Exit");
@@ -245,7 +248,7 @@ public abstract class Game extends JFrame {
 	 *
 	 * The game should automatically start.
 	 *
-	 * @see Game#stopGame()
+	 * @see Game --> #stopGame()
 	 */
 	public void startGame() {
 		_t.start();
@@ -264,7 +267,6 @@ public abstract class Game extends JFrame {
 
 	/**
 	 * Displays a dialog that says "Game Paused"
-	 *
 	 */
 	public void playerPauses() {
 		// Creating the pause dialog:
@@ -278,9 +280,24 @@ public abstract class Game extends JFrame {
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 
 		// Creating the buttons for the pause dialog:
-		JButton resumeButton = new JButton("Return to Game");
-		JButton soundButton = new JButton("Toggle Sound ON/OFF");
+		JButton resumeButton = new JButton("Return to Game (Esc)");
+		JButton fullscreenButton = new JButton("Fullscreen (F11)");
+		JButton soundButton = new JButton("Toggle Sound ON/OFF (L)");
 		JButton quitButton = new JButton("Quit Game");
+
+		// Setting the font size for the buttons:
+		Font buttonFont = new Font(resumeButton.getFont().getName(), Font.BOLD, 18);
+		resumeButton.setFont(buttonFont);
+		fullscreenButton.setFont(buttonFont);
+		soundButton.setFont(buttonFont);
+		quitButton.setFont(buttonFont);
+
+		// Setting a size for the buttons:
+		Dimension buttonSize = new Dimension(300, 100);
+		resumeButton.setPreferredSize(buttonSize);
+		fullscreenButton.setPreferredSize(buttonSize);
+		soundButton.setPreferredSize(buttonSize);
+		quitButton.setPreferredSize(buttonSize);
 
 		// Adding action listeners to the buttons:
 		resumeButton.addActionListener(new ActionListener() {
@@ -292,9 +309,71 @@ public abstract class Game extends JFrame {
 				pauseDialog.dispose(); // Close the dialog
 			}
 		});
+		fullscreenButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO: Add code to toggle fullscreen.
+			}
+		});
+		soundButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO: Add code to toggle sound on/off.
+			}
+		});
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Create the confirmation dialog
+				JDialog quitConfirmationDialog = new JDialog((Frame) null, "Quit Confirmation", Dialog.ModalityType.APPLICATION_MODAL);
+				quitConfirmationDialog.setUndecorated(true);
+				quitConfirmationDialog.setLayout(new BorderLayout());
+
+				// Create the label for the warning message
+				JTextArea warningTextArea = new JTextArea("Are you sure you wish to quit the game?");
+				warningTextArea.setFont(new Font(warningTextArea.getFont().getName(), Font.BOLD, 24));
+				warningTextArea.setEditable(false);
+
+				// Create the buttons for the confirmation dialog
+				JButton noButton = new JButton("No");
+				JButton yesButton = new JButton("Yes");
+
+				// Customize the buttons
+				Font buttonFont = new Font(noButton.getFont().getName(), Font.BOLD, 24);
+				noButton.setFont(buttonFont);
+				yesButton.setFont(buttonFont);
+
+				// Add action listeners to the buttons
+				noButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						quitConfirmationDialog.dispose();
+					}
+				});
+				yesButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.exit(0);
+					}
+				});
+
+				// Create a panel for the buttons
+				JPanel buttonPanel = new JPanel(new FlowLayout());
+				buttonPanel.add(noButton);
+				buttonPanel.add(yesButton);
+
+				// Add the components to the dialog
+				quitConfirmationDialog.add(warningTextArea, BorderLayout.CENTER);
+				quitConfirmationDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+				// Set the size and location of the dialog
+				quitConfirmationDialog.setSize(475, 100);
+				quitConfirmationDialog.setLocationRelativeTo(null);
+
+				// Make the dialog visible
+				quitConfirmationDialog.setVisible(true);
+			}
+		});
+
 
 		// Adding buttons to the button panel
 		buttonPanel.add(resumeButton);
+		buttonPanel.add(fullscreenButton);
 		buttonPanel.add(soundButton);
 		buttonPanel.add(quitButton);
 

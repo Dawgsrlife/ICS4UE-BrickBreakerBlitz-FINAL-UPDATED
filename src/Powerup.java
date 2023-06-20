@@ -10,9 +10,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-/**
- * Powerups of the game
- */
 public class Powerup extends GameObject {
     // State Variables:
     private double yMov = 1.0;
