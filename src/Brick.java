@@ -83,5 +83,4 @@ public class Brick extends GameObject {
         g.setColor(c);
         g.fillRoundRect(0, 0, getWidth(), getHeight(), 1, 1);
     }
-
 }

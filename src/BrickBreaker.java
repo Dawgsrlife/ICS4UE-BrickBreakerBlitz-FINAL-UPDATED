@@ -368,11 +368,10 @@ public class BrickBreaker extends Game {
 	 * Resets the game by teleporting the ball to the middle of the screen with a new random velocity.
 	 */
 	public void reset() {
-		b.setX(getFieldWidth() / 2);
-		b.setY(getFieldHeight() / 2);
-		velocity = (rand.nextDouble() + 1) * (rand.nextInt(2) == 1 ? 1 : -1);
-		b.setXMov(velocity);
-		b.setYMov(velocity);
+		b.reset();
+		b.setAngle(rand.nextInt(0, 360));
+		repaint();
+		stopGame();
 	}
 
 	/**
@@ -389,7 +388,7 @@ public class BrickBreaker extends Game {
 	/**
 	 * The main driver code.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		BrickBreaker BB = new BrickBreaker();
 		BB.setVisible(true);
 		BB.initComponents();
