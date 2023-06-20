@@ -37,7 +37,7 @@ public class BrickBreaker extends Game {
 	private FileWriter fw = new FileWriter("src/highscore.txt");
 
 	// Player:
-	private int health = 3, level = 1, score, highScore = 0;
+	private int health = 3, level = 3, score, highScore = 0;
 	private boolean scored = false;
 
 	// Statistic Labels:
@@ -48,7 +48,6 @@ public class BrickBreaker extends Game {
 	// Paddle:
 	private Paddle player;
 	private final int PAD_START_WIDTH = 40, PAD_THICKNESS = 6, PAD_OFFSET = 50, PAD_STARTING_SPEED = 3;
-	private BufferedImage paddleImage = null;
 
 	// Bricks — Arrays of bricks for each level:
 	private Brick[] level1Bricks, level2Bricks, level3Bricks;
@@ -76,12 +75,8 @@ public class BrickBreaker extends Game {
 
 		// Creating the paddle:
 		player = new Paddle((getFieldWidth() - PAD_START_WIDTH) / 2,
-				getFieldHeight() - PAD_OFFSET, PAD_THICKNESS * 10, PAD_START_WIDTH, PAD_STARTING_SPEED);
-		try {
-			paddleImage = ImageIO.read(new File("src/PNG/49-Breakout-Tiles.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+				getFieldHeight() - PAD_OFFSET, PAD_THICKNESS, PAD_START_WIDTH, PAD_STARTING_SPEED);
+
 
 		// Creating the power-ups:
 		laserPowerup = new Powerup(0, 0, POWERUP_SIZE, POWERUP_STARTING_SPEED, getFieldHeight(), Color.MAGENTA, false);

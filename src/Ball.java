@@ -9,12 +9,19 @@
  * when it collides with a paddle/wall/brick, etc.
  */
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class Ball extends GameObject {
-    // State Variables
+    // Image:
+    private BufferedImage image;
+
+    // State Variables:
     private int xSpawn, ySpawn;
     private int angle;
     private double speed, transferredSpeed = 0;
@@ -33,6 +40,7 @@ public class Ball extends GameObject {
      * @param angle --> starting angle
      */
     public Ball(int x, int y, int size, Color c, double speed, int angle) {
+        // Routing the fundamental fields:
         setSize(size, size);
         setX(x);
         setY(y);
@@ -43,10 +51,17 @@ public class Ball extends GameObject {
         this.c = c;
         this.speed = speed;
         this.angle = angle;
+
+        // Creating the ball image:
+        try {
+            image = ImageIO.read(new File("src/PNG/58-Breakout-Tiles.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Tells the game what to do before the actual play begins.
+     * Tells the playing field what to do from one moment to the next.
      */
     public void act() {
         while (angle >= 360) angle -= 360;
@@ -171,11 +186,14 @@ public class Ball extends GameObject {
     }
 
     /**
-     * Overrided method that paints a circle (round rectangle) for the ball rather than a rectangle.
-     * @param g --> The <code>Graphics</code> context in which to paint.
+     * Overrides the paint method to draw an image instead of filling a round-rectangle.
+     *
+     * @param g --> the <code>Graphics</code> context in which to paint
      */
+    @Override
     public void paint(Graphics g) {
-        g.setColor(c);
-        g.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
+        if (image != null) {
+            g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        }
     }
 }

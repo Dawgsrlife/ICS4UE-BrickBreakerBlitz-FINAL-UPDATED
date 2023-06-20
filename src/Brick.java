@@ -9,14 +9,22 @@
  * when it collides with a paddle/wall/brick, etc.
  */
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Brick extends GameObject {
-    // Edges (used in collision detection)
+    // Image:
+    private BufferedImage image;
+    private boolean read = true;
+
+    // Edges (used in collision detection):
     public Edge topEdge, bottomEdge, leftEdge, rightEdge;
 
     // State Variables:
-    private int health;
+    private int health, prevHealth;
     private Color c; //Colour for the paint method
 
     /**
@@ -28,12 +36,13 @@ public class Brick extends GameObject {
      * @param hp --> starting health of the brick
      */
     public Brick (int x, int y, int w, int h, int hp) {
+        // Routing the fundamental fields:
         setSize(w, h);
         setX(x);
         setY(y);
         health = hp;
 
-        // Creating the edges (each their own object) every time a Brick object is created
+        // Creating the edges (each their own object) every time a Brick object is created:
         topEdge = new Edge(x, y, w, 1);
         bottomEdge = new Edge(x, y + h - 1, w, 1);
         leftEdge = new Edge(x, y, 1, h);
@@ -46,13 +55,43 @@ public class Brick extends GameObject {
     public void act() {
         switch (health) {
             case 3 -> {
-                c = Color.RED;
+                if (read) {
+                    try {
+                        image = ImageIO.read(new File("src/PNG/17-Breakout-Tiles.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    read = false;
+                    prevHealth = health;
+                }
             }
             case 2 -> {
-                c = Color.ORANGE;
+                if (prevHealth != health) {
+                    read = true;
+                }
+                if (read) {
+                    try {
+                        image = ImageIO.read(new File("src/PNG/07-Breakout-Tiles.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    read = false;
+                    prevHealth = health;
+                }
             }
             case 1 -> {
-                c = Color.YELLOW;
+                if (prevHealth != health) {
+                    read = true;
+                }
+                if (read) {
+                    try {
+                        image = ImageIO.read(new File("src/PNG/08-Breakout-Tiles.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    read = false;
+                    prevHealth = health;
+                }
             }
             case 0 -> {
                 remove(this);
@@ -65,6 +104,7 @@ public class Brick extends GameObject {
      * @param n --> The health of the brick
      */
     public void setHealth(int n) {
+        prevHealth = health;
         health = n;
     }
 
@@ -76,11 +116,14 @@ public class Brick extends GameObject {
     }
 
     /**
-     * Overrided method that paints a circle (round rectangle) to display the powerup.
-     * @param g The <code>Graphics</code> context in which to paint.
+     * Overrides the paint method to draw an image instead of filling a rectangle.
+     *
+     * @param g --> the <code>Graphics</code> context in which to paint
      */
+    @Override
     public void paint(Graphics g) {
-        g.setColor(c);
-        g.fillRoundRect(0, 0, getWidth(), getHeight(), 1, 1);
+        if (image != null) {
+            g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        }
     }
 }

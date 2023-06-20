@@ -1,3 +1,9 @@
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.File;
+import javax.imageio.ImageIO;
+
 /**
  * Authors: Alexander Meng & Anton Lee
  * Course: ICS4UE Mr. Benum
@@ -6,10 +12,13 @@
  */
 
 public class Paddle extends GameObject {
-    // Edges
+    // Image:
+    private BufferedImage image;
+
+    // Edges:
     public Edge topEdge, leftEdge, rightEdge;
 
-    // Add any state variables here
+    // State Variables:
     private static double speed, exactX;
 
 
@@ -22,19 +31,44 @@ public class Paddle extends GameObject {
      * @param spd --> starting speed of the paddle
      */
     public Paddle (int x, int y, int h, int w, double spd) {
+        // Routing the fundamental fields:
         setSize(w, h);
         setX(x);
         setY(y);
         speed = spd;
         exactX = x;
 
-        // Creating the edges (each their own object) every time a Brick object is created
+        // Creating the edges (each their own object) every time a Brick object is created:
         topEdge = new Edge(x, y, w, 1);
         leftEdge = new Edge(x, y, 1, h);
         rightEdge = new Edge(x + w - 1, y, 1, h);
+
+        // Creating the paddle image:
+        try {
+            image = ImageIO.read(new File("src/PNG/49-Breakout-Tiles.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void act() { }
+    /**
+     * Overrides the paint method to draw an image instead of filling a rectangle.
+     *
+     * @param g --> the <code>Graphics</code> context in which to paint
+     */
+    @Override
+    public void paint(Graphics g) {
+        if (image != null) {
+            g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        }
+    }
+
+    /**
+     * Tells the playing field what to do from one moment to the next.
+     */
+    public void act() {
+        ;
+    }
 
     /**
      * Moves the paddle left by a set number of pixels.

@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -168,6 +169,8 @@ public abstract class Game extends JFrame {
 	 *
 	 * The default window size is 400x400
 	 */
+
+
 	public Game() {
 		setSize(400, 500);
 		getContentPane().setBackground(Color.BLACK);
