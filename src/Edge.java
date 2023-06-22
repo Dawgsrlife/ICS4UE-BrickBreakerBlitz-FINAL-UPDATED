@@ -12,8 +12,8 @@ public class Edge extends GameObject {
      * Constructor for the Edge class, which sets its position and dimensions
      * @param x --> x-position
      * @param y --> y-position
-     * @param h --> Edge height
      * @param w --> Edge width
+     * @param h --> Edge height
      */
     public Edge (int x, int y, int w, int h) {
         setSize(w, h);
@@ -21,7 +21,9 @@ public class Edge extends GameObject {
         setY(y);
     }
 
-    public void act () { }
+    public void act () {
+
+    }
 
     /**
      * Sets the new position for the Edge object

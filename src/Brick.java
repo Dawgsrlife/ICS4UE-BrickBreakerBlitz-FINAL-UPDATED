@@ -10,7 +10,7 @@
  */
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,6 @@ public class Brick extends GameObject {
 
     // State Variables:
     private int health, prevHealth;
-    private Color c; //Colour for the paint method
 
     /**
      * Constructor for the brick class, sets the position, dimensions, and health of the brick, also creates Edge objects for use in collision detection
@@ -117,7 +116,6 @@ public class Brick extends GameObject {
 
     /**
      * Overrides the paint method to draw an image instead of filling a rectangle.
-     *
      * @param g --> the <code>Graphics</code> context in which to paint
      */
     @Override

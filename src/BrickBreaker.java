@@ -36,8 +36,12 @@ public class BrickBreaker extends Game {
 
 	// Statistic Labels:
 	private JLabel levelLabel, scoreLabel, highScoreLabel, healthLabel;
+	private JLabel announcementLabel;
 	private int levelX, scoreX, highScoreX, livesX, textY;
-	private final int LABEL_SIZE = 10;
+	private final int LABEL_SIZE = 12;
+	private final int ANNOUNCEMENT_FONT_SIZE_ONE = 35, ANNOUNCEMENT_FONT_SIZE_TWO = 17, LABEL_OFFSET = 37, HEART_OFFSET = 5;
+	private final double ADJUSTMENT_FACTOR = 3.5;
+	private final int announcementLabelCountdownTime = 500;
 
 	// Paddle:
 	private Paddle player;
@@ -171,6 +175,17 @@ public class BrickBreaker extends Game {
 
 		calculateLabelCoordinates();
 
+		// Customizing the Announcement Label:
+		labelText = "Level: " + level + "!";
+		announcementLabel = new JLabel(labelText);
+		announcementLabel.setForeground(Color.ORANGE);
+		announcementLabel.setFont(new Font("Monospaced", Font.BOLD, ANNOUNCEMENT_FONT_SIZE_ONE));
+		announcementLabel.setHorizontalTextPosition(JLabel.CENTER);
+		updateAnnouncementText();
+		announcementLabel.setBounds((int) (getFieldWidth() / 2 - labelAdjustment), getFieldHeight() / 2 - 40, 500, 80);
+		announcementLabel.setVisible(true);
+		add(announcementLabel);
+
 		// Customizing the Level Label:
 		levelLabel = new JLabel("Level: " + level);
 		levelLabel.setForeground(Color.WHITE);
@@ -189,7 +204,7 @@ public class BrickBreaker extends Game {
 		highScoreLabel = new JLabel("High Score: " + highScore);
 		highScoreLabel.setForeground(Color.WHITE);
 		highScoreLabel.setFont(new Font("Tahoma", Font.BOLD, LABEL_SIZE));
-		highScoreLabel.setBounds(highScoreX, textY, 100, 30);
+		highScoreLabel.setBounds(highScoreX, textY, 200, 30);
 		add(highScoreLabel);
 
 		// Customizing the Health Label:
@@ -204,6 +219,33 @@ public class BrickBreaker extends Game {
 	 * Tells the playing field what to do from one moment to the next.
 	 */
 	public void act() {
+		// Display hearts:
+		remove(heartOne);
+		remove(heartTwo);
+		remove(heartThree);
+		switch (health) {
+			case 1 -> {
+				add(heartOne);
+			}
+			case 2 -> {
+				add(heartOne);
+				add(heartTwo);
+			}
+			case 3 -> {
+				add(heartOne);
+				add(heartTwo);
+				add(heartThree);
+			}
+		}
+		repaint();
+
+		// Making the announcement label only display for a set amount of time:
+		if (announcementLabelCountdown > 0) {
+			announcementLabelCountdown--;
+		} else if (announcementLabelCountdown == 0) {
+			announcementLabel.setVisible(false);
+		}
+
 		// X-collision with the lateral bounds:
 		// Left wall collision.
 		if (b.getX() <= 0) {

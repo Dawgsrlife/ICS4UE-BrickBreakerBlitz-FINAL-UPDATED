@@ -1,15 +1,15 @@
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.File;
-import javax.imageio.ImageIO;
-
 /**
  * Authors: Alexander Meng & Anton Lee
  * Course: ICS4UE Mr. Benum
  * Description: The Paddle class extends GameObject.
  * It contains a two methods: moveLeft() and moveRight() to adjust the paddle's X-position.
  */
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 public class Paddle extends GameObject {
     // Image:
@@ -18,9 +18,12 @@ public class Paddle extends GameObject {
     // Edges:
     public Edge topEdge, leftEdge, rightEdge;
 
+    // Lasers:
+    private int LASER_LENGTH = 25, LASER_WIDTH = 5;
+    public Laser leftBeam1, rightBeam1, leftBeam2, rightBeam2, leftBeam3, rightBeam3;
+
     // State Variables:
     private static double speed, exactX;
-
 
     /**
      * Constructor to set the position and dimensions of the paddle.
@@ -42,6 +45,13 @@ public class Paddle extends GameObject {
         topEdge = new Edge(x, y, w, 1);
         leftEdge = new Edge(x, y, 1, h);
         rightEdge = new Edge(x + w - 1, y, 1, h);
+
+        leftBeam1 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
+        rightBeam1 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
+        leftBeam2 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
+        rightBeam2 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
+        leftBeam3 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
+        rightBeam3 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
 
         // Creating the paddle image:
         try {
@@ -98,7 +108,7 @@ public class Paddle extends GameObject {
     }
 
     /**
-     * setter for the speed of the ball
+     * setter for the speed of the paddle
      * @param speed the new speed of the paddle
      */
     public void setSpeed(double speed) {
@@ -106,11 +116,40 @@ public class Paddle extends GameObject {
     }
 
     /**
-     * getter for the speed of the ball
-     * @return the speed of the ball, (this is not separated by x and y movements)
+     * getter for the speed of the paddle
+     * @return the speed of the paddle,
      */
     public double getSpeed() {
         return speed;
+    }
+
+    /**
+     * Creates a pair of lasers at the paddle's current position, up to 3 active pairs
+     * @param n the pair that is being created
+     */
+    public void setLaserPair (int n) {
+        switch (n) {
+            case 1 ->
+                setIndividualLaserPair(leftBeam1, rightBeam1);
+            case 2 ->
+                setIndividualLaserPair(leftBeam2, rightBeam2);
+            case 3 ->
+                setIndividualLaserPair(leftBeam3, rightBeam3);
+        }
+    }
+
+    /**
+     * Sets the new coordinates and enables the pair of laser beams designated
+     * @param leftBeam --> Left beam
+     * @param rightBeam --> Right beam
+     */
+    public void setIndividualLaserPair(Laser leftBeam, Laser rightBeam) {
+        leftBeam.setX(getX() + (int)(getWidth()/5.0));
+        leftBeam.setY(getY() - LASER_LENGTH);
+        leftBeam.setState(true);
+        rightBeam.setX(getX() + (int)(4 * getWidth()/5.0) - LASER_WIDTH);
+        rightBeam.setY(getY() - LASER_LENGTH);
+        rightBeam.setState(true);
     }
 
 }

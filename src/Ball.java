@@ -10,13 +10,15 @@
  */
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Ball extends GameObject {
+    // Miscellaneous:
+    private Random rand = new Random();
     // Image:
     private BufferedImage image;
 
@@ -26,19 +28,15 @@ public class Ball extends GameObject {
     private double speed, transferredSpeed = 0;
     private double exactX, exactY;
 
-    // Colour for the paint method:
-    private Color c;
-
     /**
      * Constructor for the Ball class, which sets the position, dimensions, colour, and the starting speed and angle of the ball
      * @param x --> x-position
      * @param y --> y-position
      * @param size --> width and height of the ball
-     * @param c --> colour of the ball
      * @param speed --> starting speed
      * @param angle --> starting angle
      */
-    public Ball(int x, int y, int size, Color c, double speed, int angle) {
+    public Ball(int x, int y, int size, double speed, int angle) {
         // Routing the fundamental fields:
         setSize(size, size);
         setX(x);
@@ -47,7 +45,6 @@ public class Ball extends GameObject {
         exactY = y;
         xSpawn = x;
         ySpawn = y;
-        this.c = c;
         this.speed = speed;
         this.angle = angle;
 
@@ -104,22 +101,6 @@ public class Ball extends GameObject {
     }
 
     /**
-     * setter for the  transferred onto the ball
-     * @param tSpd the transferred speed on the ball (from the paddle)
-     */
-    public void setTransferredSpeed(double tSpd) {
-        transferredSpeed = tSpd;
-    }
-
-    /**
-     * getter for the speed of the ball
-     * @return the speed of the ball, (this is not separated by x and y movements)
-     */
-    public double getTransferredSpeed() {
-        return transferredSpeed;
-    }
-
-    /**
      * Changes the angle of the ball as if it were bouncing off an object to its top
      */
     public void bounceOnTop() {
@@ -171,15 +152,15 @@ public class Ball extends GameObject {
      * reverses the angle of the ball, makes it go backward
      */
     public void reverseAngle() {
-        setAngle(angle + (angle > 180 ? -180 : 180));
+        setAngle(angle + (angle > 180 ? -180 : 180) + rand.nextInt(-3, 4));
     }
 
     /**
      * Resets the position and velocity of the ball
      */
     public void reset() {
-        angle = 0;
-        speed = 2;
+        angle = (rand.nextDouble() > 0.5 ? rand.nextInt(20, 70) : rand.nextInt(110, 160));
+        speed = 0;
         setX(xSpawn);
         setY(ySpawn);
     }

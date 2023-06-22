@@ -35,9 +35,10 @@ public abstract class Game extends JFrame {
 	private boolean _isSetup = false;
 	private boolean _initialized = false;
 	private boolean isPaused = true;
+	private boolean resume = false;
 	private ArrayList _ObjectList = new ArrayList();
 	private Timer _t;
-	private JDialog pauseDialog;
+	private JDialog pauseDialog, gameOverDialog;
 
 	/**
 	 * <code>true</code> if the 'D' key is being held down
@@ -53,6 +54,27 @@ public abstract class Game extends JFrame {
 	 * <code>true</code> if the Escape key is being held down.
 	 */
 	private boolean playerPaused = false;
+
+	/**
+	 * Sets the playerRight value to false, used when resetting the game to ensure no key is held
+	 */
+	public void setPlayerRightFalse() {
+		playerRight = false;
+	}
+
+	/**
+	 * Sets the playerLeft value to false, used when resetting the game to ensure no key is held
+	 */
+	public void setPlayerLeftFalse() {
+		playerLeft = false;
+	}
+
+	/**
+	 * Sets the playerPaused value to false, used when resetting the game to ensure no key is held
+	 */
+	public void setPlayerPausedFalse() {
+		playerPaused = false;
+	}
 
 	/**
 	 * Returns <code>true</code> if the 'D' key is being pressed down
@@ -99,7 +121,7 @@ public abstract class Game extends JFrame {
 	 * This may be used as a control method for checking user input and
 	 * collision between any game objects
 	 */
-	public abstract void act();
+	public abstract void act() throws IOException;
 
 	/**
 	 * Sets up the game and any objects.
@@ -175,6 +197,7 @@ public abstract class Game extends JFrame {
 	 */
 	public Game() {
 		setSize(400, 500);
+		setLocationRelativeTo(null);
 //		getContentPane().setBackground(new Color(0, 0, 0, 0));
 		getContentPane().setLayout(null);
 		setUndecorated(true);
@@ -203,7 +226,11 @@ public abstract class Game extends JFrame {
 //		);
 		_t = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				act();
+				try {
+					act();
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
 				for (int i = 0; i < _ObjectList.size(); i++) {
 					GameObject o = (GameObject)_ObjectList.get(i);
 					o.act();
@@ -263,6 +290,15 @@ public abstract class Game extends JFrame {
 	 */
 	public void stopGame() {
 		_t.stop();
+	}
+
+	/**
+	 * Displays a dialog for the win
+	 *
+	 */
+	public void playerWins() {
+		_WinDialog d = new _WinDialog(this, "You Win!");
+		d.setVisible(true);
 	}
 
 	/**
@@ -388,7 +424,73 @@ public abstract class Game extends JFrame {
 		pauseDialog.setVisible(true);
 	}
 
+	/**
+	 * Asks the player to play again with a button.
+	 */
+	public boolean playAgainPrompt() {
+		// Creating the pause dialog:
+		gameOverDialog = new JDialog((Frame) null, "Game Over", Dialog.ModalityType.APPLICATION_MODAL);
+		gameOverDialog.setUndecorated(true);
 
+		// Setting the layout for the dialog content pane:
+		gameOverDialog.setLayout(new BorderLayout());
+
+		// Creating the button panel for the game over dialog:
+		JPanel buttonPanel = new JPanel(new FlowLayout());
+
+		// Creating the button for the game over dialog:
+		JButton playAgainButton = new JButton("Play Again"),
+				quitButton = new JButton("Quit");
+
+		// Setting the font size for the button:
+		Font buttonFont = new Font(playAgainButton.getFont().getName(), Font.BOLD, 18);
+		playAgainButton.setFont(buttonFont);
+		quitButton.setFont(buttonFont);
+
+		// Setting a size for the button:
+		Dimension buttonSize = new Dimension(300, 100);
+		playAgainButton.setPreferredSize(buttonSize);
+		quitButton.setPreferredSize(buttonSize);
+
+		// Adding action listeners to the buttons:
+		playAgainButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setResume(true);
+				gameOverDialog.dispose(); // Close the dialog
+			}
+		});
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setResume(false);
+				gameOverDialog.dispose(); // Close the dialog
+				System.exit(0);
+			}
+		});
+
+		// Adding buttons to the button panel
+		buttonPanel.add(playAgainButton);
+		buttonPanel.add(quitButton);
+
+		// Adding the button panel to the centre of the dialog
+		gameOverDialog.add(buttonPanel, BorderLayout.CENTER);
+
+		// Making the dialog pack its components and center on the screen
+		gameOverDialog.pack();
+		gameOverDialog.setLocationRelativeTo(null);
+
+		// Making the dialog visible:
+		gameOverDialog.setVisible(true);
+
+		return resume;
+	}
+
+	/**
+	 * Sets the new value for resume
+	 * @param b --> the boolean value of whether the game will resume
+	 */
+	public void setResume(boolean b) {
+		resume = b;
+	}
 
 	/**
 	 * Pauses or resumes the game based on its state.
