@@ -312,27 +312,21 @@ public abstract class Game extends JFrame {
 		// Setting the layout for the dialog content pane:
 		pauseDialog.setLayout(new BorderLayout());
 
-		// Creating the buttons for the pause dialog:
+		// Creating the button panel for the pause dialog:
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 
 		// Creating the buttons for the pause dialog:
-		JButton resumeButton = new JButton("Return to Game (Esc)");
-		JButton fullscreenButton = new JButton("Fullscreen (F11)");
-		JButton soundButton = new JButton("Toggle Sound ON/OFF (L)");
+		JButton resumeButton = new JButton("Return to Game");
 		JButton quitButton = new JButton("Quit Game");
 
 		// Setting the font size for the buttons:
 		Font buttonFont = new Font(resumeButton.getFont().getName(), Font.BOLD, 18);
 		resumeButton.setFont(buttonFont);
-		fullscreenButton.setFont(buttonFont);
-		soundButton.setFont(buttonFont);
 		quitButton.setFont(buttonFont);
 
 		// Setting a size for the buttons:
 		Dimension buttonSize = new Dimension(300, 100);
 		resumeButton.setPreferredSize(buttonSize);
-		fullscreenButton.setPreferredSize(buttonSize);
-		soundButton.setPreferredSize(buttonSize);
 		quitButton.setPreferredSize(buttonSize);
 
 		// Adding action listeners to the buttons:
@@ -345,16 +339,7 @@ public abstract class Game extends JFrame {
 				pauseDialog.dispose(); // Close the dialog
 			}
 		});
-		fullscreenButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO: Add code to toggle fullscreen.
-			}
-		});
-		soundButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO: Add code to toggle sound on/off.
-			}
-		});
+
 		quitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Create the confirmation dialog
@@ -409,8 +394,6 @@ public abstract class Game extends JFrame {
 
 		// Adding buttons to the button panel
 		buttonPanel.add(resumeButton);
-		buttonPanel.add(fullscreenButton);
-		buttonPanel.add(soundButton);
 		buttonPanel.add(quitButton);
 
 		// Adding the button panel to the centre of the dialog
