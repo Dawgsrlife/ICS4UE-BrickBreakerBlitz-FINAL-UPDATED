@@ -19,7 +19,7 @@ public class Paddle extends GameObject {
     public Edge topEdge, leftEdge, rightEdge;
 
     // Lasers:
-    private int LASER_LENGTH = 25, LASER_WIDTH = 5;
+    private int LASER_LENGTH = 25, LASER_WIDTH = 5, LASER_SPEED = 4;
     public Laser leftBeam1, rightBeam1, leftBeam2, rightBeam2, leftBeam3, rightBeam3;
 
     // State Variables:
@@ -46,12 +46,12 @@ public class Paddle extends GameObject {
         leftEdge = new Edge(x, y, 1, h);
         rightEdge = new Edge(x + w - 1, y, 1, h);
 
-        leftBeam1 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
-        rightBeam1 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
-        leftBeam2 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
-        rightBeam2 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
-        leftBeam3 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
-        rightBeam3 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, (int) (speed * 1.5 + 0.5));
+        leftBeam1 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, LASER_SPEED);
+        rightBeam1 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, LASER_SPEED);
+        leftBeam2 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, LASER_SPEED);
+        rightBeam2 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, LASER_SPEED);
+        leftBeam3 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, LASER_SPEED);
+        rightBeam3 = new Laser(0, 0, LASER_WIDTH, LASER_LENGTH, LASER_SPEED);
 
         // Creating the paddle image:
         try {
@@ -144,12 +144,12 @@ public class Paddle extends GameObject {
      * @param rightBeam --> Right beam
      */
     public void setIndividualLaserPair(Laser leftBeam, Laser rightBeam) {
+        leftBeam.setState(true);
         leftBeam.setX(getX() + (int)(getWidth()/5.0));
         leftBeam.setY(getY() - LASER_LENGTH);
-        leftBeam.setState(true);
+        rightBeam.setState(true);
         rightBeam.setX(getX() + (int)(4 * getWidth()/5.0) - LASER_WIDTH);
         rightBeam.setY(getY() - LASER_LENGTH);
-        rightBeam.setState(true);
     }
 
 }
